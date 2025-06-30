@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset (assuming CSV download)
+url = "/API_SP.POP.TOTL_DS2_en_csv_v2_81108.csv"
+
+# Note: In practice, download and extract the ZIP file from the above URL manually,
+# then use the CSV like this:
+df = pd.read_csv('/API_SP.POP.TOTL_DS2_en_csv_v2_81108.csv', skiprows=4)
+
+# Filter the data for the most recent year, e.g., 2022
+year = '2022'
+df_year = df[['Country Name', year]].dropna()
+df_year.columns = ['Country', 'Population']
+
+# Plotting a histogram of population distribution
+plt.figure(figsize=(10, 6))
+plt.hist(df_year['Population'] / 1e6, bins=30, color='skyblue', edgecolor='black')
+plt.title('Histogram of Country Populations (2022)')
+plt.xlabel('Population (millions)')
+plt.ylabel('Number of Countries')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Alternatively, a bar chart for top 10 populous countries
+top10 = df_year.sort_values(by='Population', ascending=False).head(10)
+
+plt.figure(figsize=(10, 6))
+plt.bar(top10['Country'], top10['Population'] / 1e6, color='orange')
+plt.title('Top 10 Most Populous Countries (2022)')
+plt.ylabel('Population (millions)')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
